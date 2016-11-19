@@ -41,7 +41,7 @@ function Game() {
         invaderRanks: 5,
         invaderFiles: 10,
         shipSpeed: 120,
-        levelDifficultyMultiplier: 0.2,
+        levelDifficultyMultiplier: 0.3,
         pointsPerInvader: 5
     };
 
@@ -235,15 +235,15 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline="center"; 
     ctx.textAlign="center"; 
-    ctx.fillText("Build that wall!", game.width / 2, game.height/2 - 40); 
+    ctx.fillText("Space Invaders", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
     ctx.fillText("Press 's' to start.", game.width / 2, game.height/2); 
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 83) /*s*/ {
-        //  's' starts the game.
+    if(keyCode == 83) /*space*/ {
+        //  Space starts the game.
         game.level = 1;
         game.score = 50;
         game.lives = 3;
@@ -277,7 +277,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == 83) /*space*/ {
-        //  's' restarts the game.
+        //  Space restarts the game.
         game.lives = 3;
         game.score = 50;
         game.level = 1;
@@ -552,7 +552,7 @@ PlayState.prototype.update = function(game, dt) {
     }
 
     //  Check for failure
-    if(game.score <= 0 || game.score < 100 && this.invaders.length === 0){
+    if(game.score <= 0 || game.score < 100 && this.invaders.length === 0) {
     	
         game.moveToState(new GameOverState());
     }
@@ -567,7 +567,7 @@ PlayState.prototype.update = function(game, dt) {
     		game.score = 5;
     	}
     	
-        
+    	this.config.shipspeed += 5;
         
         game.moveToState(new LevelIntroState(game.level));
     }
@@ -647,7 +647,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     var info = "Mexicans Caught: " + game.lives;
     ctx.textAlign = "left";
     ctx.fillText(info, game.gameBounds.left, textYpos);
-    info = "Wall Strength: " + game.score + ", Level: " + game.level;
+    info = "Wall Strength: " + game.score + "%, Level: " + game.level;
     ctx.textAlign = "right";
     ctx.fillText(info, game.gameBounds.right, textYpos);
 
