@@ -580,7 +580,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     
     //  Draw ship.
     var trumpImg = new Image();
-    trumpImg.src = 'img/trumpSprite1.png';
+    trumpImg.src = 'img/Trump_Idle.png';
    
     ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
     
