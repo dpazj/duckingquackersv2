@@ -242,8 +242,8 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 83) /*space*/ {
-        //  Space starts the game.
+    if(keyCode == 83) /*s*/ {
+        //  's' starts the game.
         game.level = 1;
         game.score = 50;
         game.lives = 3;
@@ -277,7 +277,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == 83) /*space*/ {
-        //  Space restarts the game.
+        //  's' restarts the game.
         game.lives = 3;
         game.score = 0;
         game.level = 1;
