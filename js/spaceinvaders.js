@@ -238,14 +238,14 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("Space Invaders", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    ctx.fillText("Press 'Space' to start.", game.width / 2, game.height/2); 
+    ctx.fillText("Press 's' to start.", game.width / 2, game.height/2); 
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 32) /*space*/ {
+    if(keyCode == 83) /*space*/ {
         //  Space starts the game.
         game.level = 1;
-        game.score = 0;
+        game.score = 50;
         game.lives = 3;
         game.moveToState(new LevelIntroState(game.level));
     }
@@ -272,11 +272,11 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
     ctx.font="16px Arial";
     ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
     ctx.font="16px Arial";
-    ctx.fillText("Press 'Space' to play again.", game.width / 2, game.height/2 + 40);   
+    ctx.fillText("Press 's' to play again.", game.width / 2, game.height/2 + 40);   
 };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 32) /*space*/ {
+    if(keyCode == 83) /*space*/ {
         //  Space restarts the game.
         game.lives = 3;
         game.score = 0;
