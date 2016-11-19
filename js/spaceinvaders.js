@@ -279,7 +279,7 @@ GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == 83) /*space*/ {
         //  's' restarts the game.
         game.lives = 3;
-        game.score = 0;
+        game.score = 50;
         game.level = 1;
         game.moveToState(new LevelIntroState(1));
     }
@@ -552,14 +552,23 @@ PlayState.prototype.update = function(game, dt) {
     }
 
     //  Check for failure
-    if(game.score <= 0) {
+    if(game.score <= 0 || game.score < 100 && this.invaders.length === 0){
+    	
         game.moveToState(new GameOverState());
     }
 
     //  Check for victory
     if(game.score >= 100) {
-        game.score += this.level * 50;
-        game.level += 1;
+    	game.level += 1;
+    	if(game.level <= 9 ){
+    		game.score = 50 - (5 * game.level);
+    	}
+    	else{
+    		game.score = 5;
+    	}
+    	
+        
+        
         game.moveToState(new LevelIntroState(game.level));
     }
 };
