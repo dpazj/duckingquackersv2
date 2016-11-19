@@ -246,7 +246,7 @@ WelcomeState.prototype.keyDown = function(game, keyCode) {
         //  's' starts the game.
         game.level = 1;
         game.score = 50;
-        game.lives = 3;
+        game.lives = 0;
         game.moveToState(new LevelIntroState(game.level));
     }
 };
@@ -270,7 +270,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
     ctx.textAlign="center"; 
     ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
-    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+    ctx.fillText("You caught " + game.lives + " Mexicans and got to level " + game.level, game.width / 2, game.height/2);
     ctx.font="16px Arial";
     ctx.fillText("Press 's' to play again.", game.width / 2, game.height/2 + 40);   
 };
@@ -278,7 +278,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == 83) /*space*/ {
         //  's' restarts the game.
-        game.lives = 3;
+        game.lives = 0;
         game.score = 50;
         game.level = 1;
         game.moveToState(new LevelIntroState(1));
