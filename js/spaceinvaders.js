@@ -246,7 +246,7 @@ WelcomeState.prototype.keyDown = function(game, keyCode) {
         //  Space starts the game.
         game.level = 1;
         game.score = 50;
-        game.lives = 3;
+        game.lives = 0;
         game.moveToState(new LevelIntroState(game.level));
     }
 };
@@ -270,15 +270,16 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
     ctx.textAlign="center"; 
     ctx.fillText("Game Over!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
-    ctx.fillText("You scored " + game.score + " and got to level " + game.level, game.width / 2, game.height/2);
+    ctx.fillText("You caught " + game.lives + " Mexicans and got to level " + game.level, game.width / 2, game.height/2);
     ctx.font="16px Arial";
     ctx.fillText("Press 's' to play again.", game.width / 2, game.height/2 + 40);   
 };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
     if(keyCode == 83) /*space*/ {
-        //  Space restarts the game.
-        game.lives = 3;
+        //  's' restarts the game.
+        game.lives = 0;
+
         game.score = 50;
         game.level = 1;
         game.moveToState(new LevelIntroState(1));
@@ -580,7 +581,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     
     //  Draw ship.
     var trumpImg = new Image();
-    trumpImg.src = 'img/trumpSprite1.png';
+    trumpImg.src = 'img/Trump_Idle.png';
    
     ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
     
