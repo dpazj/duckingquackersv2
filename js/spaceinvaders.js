@@ -552,12 +552,12 @@ PlayState.prototype.update = function(game, dt) {
     }
 
     //  Check for failure
-    if(game.lives <= 0) {
+    if(game.score <= 0) {
         game.moveToState(new GameOverState());
     }
 
     //  Check for victory
-    if(this.invaders.length === 0) {
+    if(game.score >= 100) {
         game.score += this.level * 50;
         game.level += 1;
         game.moveToState(new LevelIntroState(game.level));
@@ -734,7 +734,7 @@ LevelIntroState.prototype.update = function(game, dt) {
     if(this.countdown < 1) { 
         this.countdownMessage = "1"; 
     } 
-    if(this.countdown <= 3) {
+    if(this.countdown <= 1) {
         //  Move to the next level, popping this state.
         game.moveToState(new PlayState(game.config, this.level));
     }
