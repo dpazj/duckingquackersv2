@@ -291,7 +291,7 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
     ctx.font="16px Arial";
     ctx.fillText("You caught " + game.lives + " Mexicans and got to level " + game.level, game.width / 2, game.height/2);
     ctx.font="16px Arial";
-    ctx.fillText("Press 's' to play again.", game.width / 2, game.height/2 + 40);   
+    ctx.fillText("Press 'Enter' to play again.", game.width / 2, game.height/2 + 40);   
 };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
