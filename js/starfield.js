@@ -86,7 +86,7 @@ Starfield.prototype.draw = function() {
 	ctx.fillRect(0, 0, this.width, this.height);
 
 	//	Draw stars.
-	ctx.fillStyle = '#FFFFFF';
+	ctx.fillStyle = '#a69150';
 	for(var i=0; i<this.stars.length;i++) {
 		var star = this.stars[i];
 		ctx.fillRect(star.x, star.y, star.size, star.size);
