@@ -22,6 +22,11 @@
 */
 
 //  Creates an instance of the Game class.
+
+var pace = 1;
+
+
+
 function Game() {
 
     //  Set the initial config.
@@ -359,18 +364,20 @@ PlayState.prototype.enter = function(game) {
     }
     this.wallBlocks = wallBlocks;
 };
-
 PlayState.prototype.update = function(game, dt) {
     
     //  If the left or right arrow keys are pressed, move
     //  the ship. Check this on ticks rather than via a keydown
     //  event for smooth movement, otherwise the ship would move
     //  more like a text editor caret.
+    walking = false;
     if(game.pressedKeys[37]) {
         this.ship.x -= this.shipSpeed * dt;
+        walking = true;
     }
     if(game.pressedKeys[39]) {
         this.ship.x += this.shipSpeed * dt;
+        walking = true;
     }
     if(game.pressedKeys[32]) {
         this.fireRocket();
@@ -574,7 +581,13 @@ PlayState.prototype.update = function(game, dt) {
         game.moveToState(new LevelIntroState(game.level));
     }
 };
+function changePace()
+{
+	//window.alert('!!');
+	pace == 1? pace = 2 : pace = 1;
 
+}
+myVar = setInterval(changePace, 100);
 PlayState.prototype.draw = function(game, dt, ctx) {
 
     //  Clear the background.
@@ -582,9 +595,31 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     
     //  Draw ship.
     var trumpImg = new Image();
+    var trumpImg1 = new Image();
+    var trumpImg0 = new Image();
     trumpImg.src = 'img/Trump_Idle.png';
-   
-    ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+    trumpImg0.src = 'img/walk0.png';
+    trumpImg1.src = 'img/walk1.png';
+
+    
+   if (walking)
+   {
+   	
+   	//clearTimeout(myVar);
+   	if(pace == 1)
+   	{
+   	  ctx.drawImage(trumpImg0, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	}
+   	else
+   	{
+   	  ctx.drawImage(trumpImg1, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	}
+   }
+   else
+   {
+   	  ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   }
+  
     
     
     // Draw wall
