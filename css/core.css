@@ -30,3 +30,8 @@ a:focus {
   color: #005580;
   text-decoration: underline;
 }
+
+div 
+{
+	text-align: center;
+}

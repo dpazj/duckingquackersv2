@@ -1,5 +1,4 @@
-/*
-  spaceinvaders.js
+/*  spaceinvaders.js
 
   the core logic for the space invaders game.
 
