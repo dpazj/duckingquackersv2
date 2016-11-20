@@ -35,16 +35,14 @@ function Game() {
 
     //  Set the initial config.
     this.config = {
-
-        mexicanRate: 0.07,
-        mexicanMinVelocity: 50,
-        mexicanMaxVelocity: 50,
-        tacoInitialVelocity: 25,
-        tacoAcceleration: 0,
-        tacoDropDistance: 20,
-        brickVelocity: 120,
-        brickMaxFireRate: 2,
-
+        bombRate: 0.07,
+        bombMinVelocity: 50,
+        bombMaxVelocity: 50,
+        invaderInitialVelocity: 25,
+        invaderAcceleration: 0,
+        invaderDropDistance: 20,
+        rocketVelocity: 120,
+        rocketMaxFireRate: 2,
         gameWidth: 700,
         gameHeight: 300,
         fps: 50,
@@ -52,11 +50,9 @@ function Game() {
         tacoRanks: 5,
         tacoFiles: 10,
         trumpSpeed: 150,
-        
         levelDifficultyMultiplier: 0.3,
         pointsPertaco: 5
     };
-
     //  All state is in the variables below.
     this.lives = 0;
     this.width = 0;
