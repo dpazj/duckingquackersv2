@@ -31,7 +31,7 @@ function Game() {
 
     //  Set the initial config.
     this.config = {
-        bombRate: 0.05,
+        bombRate: 0.02,
         bombMinVelocity: 50,
         bombMaxVelocity: 50,
         invaderInitialVelocity: 25,
@@ -356,7 +356,7 @@ PlayState.prototype.enter = function(game) {
     for(var rank = 0; rank < wallRank; rank++){
         for(var file = 0; file < wallFiles; file++) {
             wallBlocks.push(new Wall(
-                        (game.width / 2) + ((wallFiles/2 - file) * 750 / wallFiles),
+                        (game.width / 2) + ((wallFiles/2 - file) * 780 / wallFiles),
                         (game.gameBounds.bottom +70)
                         ));
 
@@ -473,7 +473,7 @@ PlayState.prototype.update = function(game, dt) {
             var rocket = this.rockets[j];
 
             if(rocket.x >= (invader.x - invader.width) && rocket.x <= (invader.x  + invader.width) &&
-                rocket.y >= (invader.y - invader.height) && rocket.y <= (invader.y + invader.height)) {
+                rocket.y >= (invader.y - invader.height)/1.2 && rocket.y <= (invader.y + invader.height)/1.2) {
                 
                 //  Remove the rocket, set 'bang' so we don't process
                 //  this rocket again.
@@ -593,6 +593,10 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     //  Clear the background.
     ctx.clearRect(0, 0, game.width, game.height);
     
+    //draw background
+    
+    
+    
     //  Draw ship.
     var trumpImg = new Image();
     var trumpImg1 = new Image();
@@ -656,7 +660,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         var bomb = this.bombs[i];
         
        
-        
+        ctx.globalCompositeOperation='destination-over';
         ctx.drawImage(bomb.image,(bomb.x) - 40,  (bomb.y) - 85 );
         
     
@@ -674,7 +678,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         var brick = new Image();
         brick.src = 'img/brick1.png';
        
-        ctx.drawImage(brick,rocket.x, rocket.y -100);	
+        ctx.drawImage(brick,rocket.x, rocket.y -50);	
         
     		
     		  
@@ -683,6 +687,12 @@ PlayState.prototype.draw = function(game, dt, ctx) {
       
       // ctx.fillRect(rocket.x, rocket.y - 2, 1, 4);
     }
+    
+    
+    var background = new Image();
+    ctx.globalCompositeOperation='destination-over';
+    background.src = 'img/background.png';
+    ctx.drawImage(background,20,35);
 
     //  Draw info.
     var textYpos = game.gameBounds.bottom + ((game.height - game.gameBounds.bottom + 100) / 2) + 14/2;
