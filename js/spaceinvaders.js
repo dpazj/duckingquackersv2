@@ -243,12 +243,12 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("Build That Wall!", game.width / 2, game.height/2 - 40); 
     ctx.font="16px Arial";
 
-    ctx.fillText("Press 's' to start.", game.width / 2, game.height/2); 
+    ctx.fillText("Press 'Enter' to start.", game.width / 2, game.height/2); 
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 83) /*space*/ {
-        //  Space starts the game.
+    if(keyCode == 13) /*space*/ {
+        //  Enter starts the game.
         game.level = 1;
         game.score = 50;
         game.lives = 0;
@@ -281,8 +281,8 @@ GameOverState.prototype.draw = function(game, dt, ctx) {
 };
 
 GameOverState.prototype.keyDown = function(game, keyCode) {
-    if(keyCode == 83) /*space*/ {
-        //  's' restarts the game.
+    if(keyCode == 13) /*space*/ {
+        //  'Enter' restarts the game.
         game.lives = 0;
 
         game.score = 50;
@@ -797,7 +797,7 @@ LevelIntroState.prototype.update = function(game, dt) {
     if(this.countdown < 1) { 
         this.countdownMessage = "1"; 
     } 
-    if(this.countdown <= 3) {
+    if(this.countdown < 1) {
         //  Move to the next level, popping this state.
         game.moveToState(new PlayState(game.config, this.level));
     }
@@ -813,7 +813,7 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline="middle"; 
     ctx.textAlign="center"; 
-    ctx.fillText("Level " + this.level, game.width / 2, game.height/2);
+    ctx.fillText("Start of Level " + this.level, game.width / 2, game.height/2);
     ctx.font="24px Arial";
     ctx.fillText("Making America Great Again in " + this.countdownMessage, game.width / 2, game.height/2 + 36);      
     return;
