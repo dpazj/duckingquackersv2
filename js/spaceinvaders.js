@@ -655,12 +655,17 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     
     //  Draw ship.
     var trumpImg = new Image();
+    var trumpImg4 = new Image();
+    var trumpImg3 = new Image();
+    var trumpImg2 = new Image();
     var trumpImg1 = new Image();
     var trumpImg0 = new Image();
     trumpImg.src = 'img/Trump_Idle.png';
     trumpImg0.src = 'img/walk0.png';
     trumpImg1.src = 'img/walk1.png';
-
+    trumpImg2.src = 'img/Trump_Jump_Left.png';
+    trumpImg3.src = 'img/Trump_Jump_Right.png';
+    trumpImg4.src = 'img/Trump_Jump_Up.png';
     
    if (walking)
    {
@@ -668,29 +673,28 @@ PlayState.prototype.draw = function(game, dt, ctx) {
    	//clearTimeout(myVar);
    	if(pace == 1)
    	{
-   	  ctx.drawImage(trumpImg0, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
-   	}
-   	else
+   	  if(game.pressedKeys[37] && jumping == true)ctx.drawImage(trumpImg2, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34); 
+      else ctx.drawImage(trumpImg0, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	  
+    }
+   	else if(pace == 2)
    	{
-   	  ctx.drawImage(trumpImg1, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
-   	}
+   	  
+      if(game.pressedKeys[39] && jumping == true)ctx.drawImage(trumpImg3, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);  
+      else ctx.drawImage(trumpImg1, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	  
+    }
    }
+   else if (jumping)
+    {
+        ctx.drawImage(trumpImg4, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);
+        //alert("Javascript alert for Jump!");
+    }
    else
    {
    	  ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
    }
-  
 
-  	var jumpHeight = 45;
-
-  	if (jumping)
-  	{
-  		//this.ship.y -= 45;
-  	}
-  	if (jumping)
-  	{
-  		ctx.drawImage(trumpImg1,this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);
-  	}
     
     
     // Draw wall
