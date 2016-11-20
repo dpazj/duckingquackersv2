@@ -608,7 +608,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         
         
         
-        ctx.drawImage(invader.image, (invader.x - invader.width/2), (invader.y - invader.height/2)-70);	
+        ctx.drawImage(invader.image, (invader.x - invader.width/2), (invader.y - invader.height/2)-100);	
         //ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
     }
 
@@ -639,7 +639,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         var brick = new Image();
         brick.src = 'img/brick1.png';
        
-        ctx.drawImage(brick,rocket.x, rocket.y -70);	
+        ctx.drawImage(brick,rocket.x, rocket.y -100);	
         
     		
     		  
