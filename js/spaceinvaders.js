@@ -24,6 +24,10 @@
 //  Creates an instance of the Game class.
 
 var pace = 1;
+var jumping = false;
+var gravitySpeed = 2.5;
+
+
 
 
 
@@ -46,6 +50,7 @@ function Game() {
         invaderRanks: 5,
         invaderFiles: 10,
         shipSpeed: 150,
+        
         levelDifficultyMultiplier: 0.3,
         pointsPerInvader: 5
     };
@@ -58,7 +63,9 @@ function Game() {
     this.intervalId = 0;
     this.score = 50;
     this.level = 1;
-
+    this.jumping = false;
+    this.walking = false;
+    this.shipSpeedY = 0;
     //  The state stack.
     this.stateStack = [];
 
@@ -84,7 +91,7 @@ Game.prototype.initialise = function(gameCanvas) {
     this.gameBounds = {
         left: gameCanvas.width / 2 - this.config.gameWidth / 2,
         right: gameCanvas.width / 2 + this.config.gameWidth / 2,
-        top: gameCanvas.height / 2 - this.config.gameHeight / 2,
+        top: gameCanvas.height / 2 - this.config.gameHeight / 2, 
         bottom: gameCanvas.height / 2 + this.config.gameHeight / 2,
     };
     
@@ -364,6 +371,18 @@ PlayState.prototype.enter = function(game) {
     }
     this.wallBlocks = wallBlocks;
 };
+
+function jump(){
+    	if (!jumping){
+    		jumping = true;
+    		
+    	}
+    }
+
+
+
+
+
 PlayState.prototype.update = function(game, dt) {
     
     //  If the left or right arrow keys are pressed, move
@@ -375,14 +394,45 @@ PlayState.prototype.update = function(game, dt) {
         this.ship.x -= this.shipSpeed * dt;
         walking = true;
     }
+    
     if(game.pressedKeys[39]) {
         this.ship.x += this.shipSpeed * dt;
         walking = true;
+    }
+    if(game.pressedKeys[38]) {
+    	if (!jumping)
+    	{
+    		jumping = true;
+    		this.shipSpeedY = 20;
+    	}
+    	
+    		
+    		
+    		//if(this.ship.y)
+
     }
     if(game.pressedKeys[32]) {
         this.fireRocket();
     }
 
+    //Trump falling
+    
+    if (jumping)
+    {
+    	
+    	this.ship.y -= this.shipSpeedY;
+    	this.shipSpeedY -= gravitySpeed;
+    	if ((this.ship.y) >= game.gameBounds.bottom)
+    	{
+    		//this.ship.y += game.gameBounds.bottom - this.ship.y;
+
+    		jumping = false;//jump ends
+    		shipSpeedY = 0;
+    		//this.ship.y = game.gameBounds.bottom;
+    	}
+}
+//this.shipSpeedY -= gravitySpeed;
+   
     //  Keep the ship in bounds.
     if(this.ship.x < game.gameBounds.left) {
         this.ship.x = game.gameBounds.left;
@@ -464,7 +514,7 @@ PlayState.prototype.update = function(game, dt) {
         this.lives = 0;
     }
     
-    //  Check for rocket/invader collisions.
+    //  Check for brick/Mexicans collisions.
     for(i=0; i<this.invaders.length; i++) {
         var invader = this.invaders[i];
         var bang = false;
@@ -514,7 +564,7 @@ PlayState.prototype.update = function(game, dt) {
         }
     }
 
-    //  Check for bomb/ship collisions.
+    //  Check for bomb/Trump collisions.
     for(var i=0; i<this.bombs.length; i++) {
         var bomb = this.bombs[i];
         if(bomb.x >= (this.ship.x - this.ship.width/2) && bomb.x <= (this.ship.x + this.ship.width/2) &&
@@ -539,6 +589,8 @@ PlayState.prototype.update = function(game, dt) {
             }
         }
     }
+
+
 
     function bombCollision(){
         game.score = game.score - 5;
@@ -588,6 +640,7 @@ function changePace()
 
 }
 myVar = setInterval(changePace, 100);
+
 PlayState.prototype.draw = function(game, dt, ctx) {
 
     //  Clear the background.
@@ -624,6 +677,17 @@ PlayState.prototype.draw = function(game, dt, ctx) {
    	  ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
    }
   
+
+  	var jumpHeight = 45;
+
+  	if (jumping)
+  	{
+  		//this.ship.y -= 45;
+  	}
+  	if (jumping)
+  	{
+  		ctx.drawImage(trumpImg1,this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);
+  	}
     
     
     // Draw wall
