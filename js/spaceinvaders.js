@@ -883,6 +883,7 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("Start of Level " + this.level, game.width / 2, game.height/2);
     ctx.font="24px Arial";
     ctx.fillText("Making America Great Again in " + this.countdownMessage, game.width / 2, game.height/2 + 36);      
+    jumping = false;
     return;
 };
 
