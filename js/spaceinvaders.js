@@ -8,14 +8,14 @@
 /*  
     Game Class
 
-    The Game class represents a Space Invaders game.
+    The Game class represents a Space invaders game.
     Create an instance of it, change any of the default values
     in the settings, and call 'start' to run the game.
 
     Call 'initialise' before 'start' to set the canvas the game
     will draw to.
 
-    Call 'moveShip' or 'shipFire' to control the ship.
+    Call 'movetrump' or 'trumpFire' to control the trump.
 
     Listen for 'gameWon' or 'gameLost' events to handle the game
     ending.
@@ -35,24 +35,26 @@ function Game() {
 
     //  Set the initial config.
     this.config = {
-        bombRate: 0.07,
-        bombMinVelocity: 50,
-        bombMaxVelocity: 50,
-        invaderInitialVelocity: 25,
-        invaderAcceleration: 0,
-        invaderDropDistance: 20,
-        rocketVelocity: 120,
-        rocketMaxFireRate: 2,
+
+        mexicanRate: 0.07,
+        mexicanMinVelocity: 50,
+        mexicanMaxVelocity: 50,
+        tacoInitialVelocity: 25,
+        tacoAcceleration: 0,
+        tacoDropDistance: 20,
+        brickVelocity: 120,
+        brickMaxFireRate: 2,
+
         gameWidth: 700,
         gameHeight: 300,
         fps: 50,
         debugMode: false,
-        invaderRanks: 5,
-        invaderFiles: 10,
-        shipSpeed: 150,
+        tacoRanks: 5,
+        tacoFiles: 10,
+        trumpSpeed: 150,
         
         levelDifficultyMultiplier: 0.3,
-        pointsPerInvader: 5
+        pointsPertaco: 5
     };
 
     //  All state is in the variables below.
@@ -65,7 +67,7 @@ function Game() {
     this.level = 1;
     this.jumping = false;
     this.walking = false;
-    this.shipSpeedY = 0;
+    this.trumpSpeedY = 0;
     //  The state stack.
     this.stateStack = [];
 
@@ -311,57 +313,57 @@ function PlayState(config, level) {
     this.level = level;
 
     //  Game state.
-    this.invaderCurrentVelocity =  10;
-    this.invaderCurrentDropDistance =  0;
-    this.invadersAreDropping =  true;
-    this.lastRocketTime = null;
+    this.tacoCurrentVelocity =  10;
+    this.tacoCurrentDropDistance =  0;
+    this.tacosAreDropping =  true;
+    this.lastbrickTime = null;
 
     //  Game entities.
-    this.ship = null;
-    this.invaders = [];
-    this.rockets = [];
-    this.bombs = [];
+    this.trump = null;
+    this.tacos = [];
+    this.bricks = [];
+    this.mexicans = [];
     this.wallBlocks=[]
 }
 
 PlayState.prototype.enter = function(game) {
 
-    //  Create the ship.
-    this.ship = new Ship(game.width / 2, game.gameBounds.bottom);
+    //  Create the trump.
+    this.trump = new trump(game.width / 2, game.gameBounds.bottom);
 
 
     //Create the wall
     this.wall = new Wall
 
     //  Setup initial state.
-    this.invaderCurrentVelocity =  10;
-    this.invaderCurrentDropDistance =  0;
-    this.invadersAreDropping =  false;
+    this.tacoCurrentVelocity =  10;
+    this.tacoCurrentDropDistance =  0;
+    this.tacosAreDropping =  false;
 
-    //  Set the ship speed for this level, as well as invader params.
+    //  Set the trump speed for this level, as well as taco params.
     var levelMultiplier = this.level * this.config.levelDifficultyMultiplier;
-    this.shipSpeed = this.config.shipSpeed;
-    this.invaderInitialVelocity = this.config.invaderInitialVelocity + (levelMultiplier * this.config.invaderInitialVelocity);
-    this.bombRate = this.config.bombRate + (levelMultiplier * this.config.bombRate);
-    this.bombMinVelocity = this.config.bombMinVelocity + (levelMultiplier * this.config.bombMinVelocity);
-    this.bombMaxVelocity = this.config.bombMaxVelocity + (levelMultiplier * this.config.bombMaxVelocity);
+    this.trumpSpeed = this.config.trumpSpeed;
+    this.tacoInitialVelocity = this.config.tacoInitialVelocity + (levelMultiplier * this.config.tacoInitialVelocity);
+    this.mexicanRate = this.config.mexicanRate + (levelMultiplier * this.config.mexicanRate);
+    this.mexicanMinVelocity = this.config.mexicanMinVelocity + (levelMultiplier * this.config.mexicanMinVelocity);
+    this.mexicanMaxVelocity = this.config.mexicanMaxVelocity + (levelMultiplier * this.config.mexicanMaxVelocity);
 
-    //  Create the invaders.
-    var ranks = this.config.invaderRanks;
-    var files = this.config.invaderFiles;
-    var invaders = [];
+    //  Create the tacos.
+    var ranks = this.config.tacoRanks;
+    var files = this.config.tacoFiles;
+    var tacos = [];
     for(var rank = 0; rank < ranks; rank++){
         for(var file = 0; file < files; file++) {
-            invaders.push(new Invader(
+            tacos.push(new taco(
                 (game.width / 2) + ((files/2 - file) * 510 / files),
                 (game.gameBounds.top + rank * 40),
-                rank, file, 'Invader'));
+                rank, file, 'taco'));
         }
     }
-    this.invaders = invaders;
-    this.invaderCurrentVelocity = this.invaderInitialVelocity;
-    this.invaderVelocity = {x: -this.invaderInitialVelocity, y:0};
-    this.invaderNextVelocity = null;
+    this.tacos = tacos;
+    this.tacoCurrentVelocity = this.tacoInitialVelocity;
+    this.tacoVelocity = {x: -this.tacoInitialVelocity, y:0};
+    this.tacoNextVelocity = null;
 
     //create the wall
     var wallRank = 3;
@@ -393,33 +395,33 @@ function jump(){
 PlayState.prototype.update = function(game, dt) {
     
     //  If the left or right arrow keys are pressed, move
-    //  the ship. Check this on ticks rather than via a keydown
-    //  event for smooth movement, otherwise the ship would move
+    //  the trump. Check this on ticks rather than via a keydown
+    //  event for smooth movement, otherwise the trump would move
     //  more like a text editor caret.
     walking = false;
     if(game.pressedKeys[37]) {
-        this.ship.x -= this.shipSpeed * dt;
+        this.trump.x -= this.trumpSpeed * dt;
         walking = true;
     }
     
     if(game.pressedKeys[39]) {
-        this.ship.x += this.shipSpeed * dt;
+        this.trump.x += this.trumpSpeed * dt;
         walking = true;
     }
     if(game.pressedKeys[38]) {
     	if (!jumping)
     	{
     		jumping = true;
-    		this.shipSpeedY = 20;
+    		this.trumpSpeedY = 20;
     	}
     	
     		
     		
-    		//if(this.ship.y)
+    		//if(this.trump.y)
 
     }
     if(game.pressedKeys[32]) {
-        this.fireRocket();
+        this.firebrick();
     }
 
     //Trump falling
@@ -427,56 +429,56 @@ PlayState.prototype.update = function(game, dt) {
     if (jumping)
     {
     	
-    	this.ship.y -= this.shipSpeedY;
-    	this.shipSpeedY -= gravitySpeed;
-    	if ((this.ship.y) >= game.gameBounds.bottom)
+    	this.trump.y -= this.trumpSpeedY;
+    	this.trumpSpeedY -= gravitySpeed;
+    	if ((this.trump.y) >= game.gameBounds.bottom)
     	{
-    		//this.ship.y += game.gameBounds.bottom - this.ship.y;
+    		//this.trump.y += game.gameBounds.bottom - this.trump.y;
 
     		jumping = false;//jump ends
-    		shipSpeedY = 0;
-    		//this.ship.y = game.gameBounds.bottom;
+    		trumpSpeedY = 0;
+    		//this.trump.y = game.gameBounds.bottom;
     	}
 }
-//this.shipSpeedY -= gravitySpeed;
+//this.trumpSpeedY -= gravitySpeed;
    
-    //  Keep the ship in bounds.
-    if(this.ship.x < game.gameBounds.left) {
-        this.ship.x = game.gameBounds.left;
+    //  Keep the trump in bounds.
+    if(this.trump.x < game.gameBounds.left) {
+        this.trump.x = game.gameBounds.left;
     }
-    if(this.ship.x > game.gameBounds.right) {
-        this.ship.x = game.gameBounds.right;
+    if(this.trump.x > game.gameBounds.right) {
+        this.trump.x = game.gameBounds.right;
     }
 
-    //  Move each bomb.
-    for(var i=0; i<this.bombs.length; i++) {
-        var bomb = this.bombs[i];
-        bomb.y += dt * bomb.velocity;
+    //  Move each mexican.
+    for(var i=0; i<this.mexicans.length; i++) {
+        var mexican = this.mexicans[i];
+        mexican.y += dt * mexican.velocity;
 
-        //  If the rocket has gone off the screen remove it.
-        if(bomb.y > this.height) {
-            this.bombs.splice(i--, 1);
+        //  If the brick has gone off the screen remove it.
+        if(mexican.y > this.height) {
+            this.mexicans.splice(i--, 1);
         }
     }
 
-    //  Move each rocket.
-    for(i=0; i<this.rockets.length; i++) {
-        var rocket = this.rockets[i];
-        rocket.y -= dt * rocket.velocity;
+    //  Move each brick.
+    for(i=0; i<this.bricks.length; i++) {
+        var brick = this.bricks[i];
+        brick.y -= dt * brick.velocity;
 
-        //  If the rocket has gone off the screen remove it.
-        if(rocket.y < 0) {
-            this.rockets.splice(i--, 1);
+        //  If the brick has gone off the screen remove it.
+        if(brick.y < 0) {
+            this.bricks.splice(i--, 1);
         }
     }
 
-    //  Move the invaders.
+    //  Move the tacos.
     var hitLeft = false, hitRight = false, hitBottom = false;
     
-    for(i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
-        var newx = invader.x + this.invaderVelocity.x * dt;
-        var newy = invader.y + this.invaderVelocity.y * dt;
+    for(i=0; i<this.tacos.length; i++) {
+        var taco = this.tacos[i];
+        var newx = taco.x + this.tacoVelocity.x * dt;
+        var newy = taco.y + this.tacoVelocity.y * dt;
         if(hitLeft == false && newx < game.gameBounds.left) {
             hitLeft = true;
         }
@@ -488,33 +490,33 @@ PlayState.prototype.update = function(game, dt) {
         // }
 
         if(!hitLeft && !hitRight && !hitBottom) {
-            invader.x = newx;
-            //invader.y = newy;
+            taco.x = newx;
+            //taco.y = newy;
         }
     }
 
-    //  Update invader velocities.
-    if(this.invadersAreDropping) {
-        this.invaderCurrentDropDistance += this.invaderVelocity.y * dt;
-        if(this.invaderCurrentDropDistance >= this.config.invaderDropDistance) {
-            this.invadersAreDropping = false;
-            this.invaderVelocity = this.invaderNextVelocity;
-            this.invaderCurrentDropDistance = 0;
+    //  Update taco velocities.
+    if(this.tacosAreDropping) {
+        this.tacoCurrentDropDistance += this.tacoVelocity.y * dt;
+        if(this.tacoCurrentDropDistance >= this.config.tacoDropDistance) {
+            this.tacosAreDropping = false;
+            this.tacoVelocity = this.tacoNextVelocity;
+            this.tacoCurrentDropDistance = 0;
         }
     }
     //  If we've hit the left, move down then right.
     if(hitLeft) {
-        this.invaderCurrentVelocity += this.config.invaderAcceleration;
-        this.invaderVelocity = {x: 0, y:this.invaderCurrentVelocity };
-        this.invadersAreDropping = true;
-        this.invaderNextVelocity = {x: this.invaderCurrentVelocity , y:0};
+        this.tacoCurrentVelocity += this.config.tacoAcceleration;
+        this.tacoVelocity = {x: 0, y:this.tacoCurrentVelocity };
+        this.tacosAreDropping = true;
+        this.tacoNextVelocity = {x: this.tacoCurrentVelocity , y:0};
     }
     //  If we've hit the right, move down then left.
     if(hitRight) {
-        this.invaderCurrentVelocity += this.config.invaderAcceleration;
-        this.invaderVelocity = {x: 0, y:this.invaderCurrentVelocity };
-        this.invadersAreDropping = true;
-        this.invaderNextVelocity = {x: -this.invaderCurrentVelocity , y:0};
+        this.tacoCurrentVelocity += this.config.tacoAcceleration;
+        this.tacoVelocity = {x: 0, y:this.tacoCurrentVelocity };
+        this.tacosAreDropping = true;
+        this.tacoNextVelocity = {x: -this.tacoCurrentVelocity , y:0};
     }
     //  If we've hit the bottom, it's game over.
     if(hitBottom) {
@@ -522,76 +524,76 @@ PlayState.prototype.update = function(game, dt) {
     }
     
     //  Check for brick/Mexicans collisions.
-    for(i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
+    for(i=0; i<this.tacos.length; i++) {
+        var taco = this.tacos[i];
         var bang = false;
 
-        for(var j=0; j<this.rockets.length; j++){
-            var rocket = this.rockets[j];
+        for(var j=0; j<this.bricks.length; j++){
+            var brick = this.bricks[j];
 
-            if(rocket.x >= (invader.x - invader.width) && rocket.x <= (invader.x  + invader.width) &&
-                rocket.y >= (invader.y - invader.height)/1.2 && rocket.y <= (invader.y + invader.height)/1.2) {
+            if(brick.x >= (taco.x - taco.width) && brick.x <= (taco.x  + taco.width) &&
+                brick.y >= (taco.y - taco.height)/1.2 && brick.y <= (taco.y + taco.height)/1.2) {
                 
-                //  Remove the rocket, set 'bang' so we don't process
-                //  this rocket again.
-                this.rockets.splice(j--, 1);
+                //  Remove the brick, set 'bang' so we don't process
+                //  this brick again.
+                this.bricks.splice(j--, 1);
                 bang = true;
-                game.score += this.config.pointsPerInvader;
+                game.score += this.config.pointsPertaco;
                 break;
             }
         }
         if(bang) {
-            this.invaders.splice(i--, 1);
+            this.tacos.splice(i--, 1);
             game.sounds.playSound('bang');
         }
     }
 
     
-    //  Find all of the front rank invaders.
-    var frontRankInvaders = {};
-    for(var i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
-        //  If we have no invader for game file, or the invader
+    //  Find all of the front rank tacos.
+    var frontRanktacos = {};
+    for(var i=0; i<this.tacos.length; i++) {
+        var taco = this.tacos[i];
+        //  If we have no taco for game file, or the taco
         //  for game file is futher behind, set the front
-        //  rank invader to game one.
-        if(!frontRankInvaders[invader.file] || frontRankInvaders[invader.file].rank < invader.rank) {
-            frontRankInvaders[invader.file] = invader;
+        //  rank taco to game one.
+        if(!frontRanktacos[taco.file] || frontRanktacos[taco.file].rank < taco.rank) {
+            frontRanktacos[taco.file] = taco;
         }
     }
 
-    //  Give each front rank invader a chance to drop a bomb.
-    for(var i=0; i<this.config.invaderFiles; i++) {
-        var invader = frontRankInvaders[i];
-        if(!invader) continue;
-        var chance = this.bombRate * dt;
+    //  Give each front rank taco a chance to drop a mexican.
+    for(var i=0; i<this.config.tacoFiles; i++) {
+        var taco = frontRanktacos[i];
+        if(!taco) continue;
+        var chance = this.mexicanRate * dt;
         if(chance > Math.random()) {
             //  Fire!
-            this.bombs.push(new Bomb(invader.x, invader.y + invader.height/2, 
-                this.bombMinVelocity + Math.random()*(this.bombMaxVelocity - this.bombMinVelocity)));
+            this.mexicans.push(new Mexican(taco.x, taco.y + taco.height/2, 
+                this.mexicanMinVelocity + Math.random()*(this.mexicanMaxVelocity - this.mexicanMinVelocity)));
         }
     }
 
-    //  Check for bomb/Trump collisions.
-    for(var i=0; i<this.bombs.length; i++) {
-        var bomb = this.bombs[i];
-        if(bomb.x >= (this.ship.x - this.ship.width/2) && bomb.x <= (this.ship.x + this.ship.width/2) &&
-                bomb.y >= (this.ship.y - this.ship.height/2) && bomb.y <= (this.ship.y + this.ship.height/2)) {
-            this.bombs.splice(i--, 1);
+    //  Check for mexican/Trump collisions.
+    for(var i=0; i<this.mexicans.length; i++) {
+        var mexican = this.mexicans[i];
+        if(mexican.x >= (this.trump.x - this.trump.width/2) && mexican.x <= (this.trump.x + this.trump.width/2) &&
+                mexican.y >= (this.trump.y - this.trump.height/2) && mexican.y <= (this.trump.y + this.trump.height/2)) {
+            this.mexicans.splice(i--, 1);
             game.lives++;
             game.sounds.playSound('explosion');
         }
                 
     }
 
-    //  Check for bomb/ship collisions.
-    for(var i=0; i<this.bombs.length; i++) {
-        var bomb = this.bombs[i];
+    //  Check for mexican/Trump collisions.
+    for(var i=0; i<this.mexicans.length; i++) {
+        var mexican = this.mexicans[i];
         for(var j=0; j<this.wallBlocks.length; j++) {
             var wall = this.wallBlocks[j];
-            if(bomb.x >= (wall.x - wall.width/2) && bomb.x <= (wall.x + wall.width/2) &&
-                    bomb.y >= (wall.y - wall.height/2) && bomb.y <= (wall.y + wall.height/2)) {
-                this.bombs.splice(i--, 1);
-                bombCollision();
+            if(mexican.x >= (wall.x - wall.width/2) && mexican.x <= (wall.x + wall.width/2) &&
+                    mexican.y >= (wall.y - wall.height/2) && mexican.y <= (wall.y + wall.height/2)) {
+                this.mexicans.splice(i--, 1);
+                mexicanCollision();
                 break;
             }
         }
@@ -599,20 +601,20 @@ PlayState.prototype.update = function(game, dt) {
 
 
 
-    function bombCollision(){
+    function mexicanCollision(){
         game.score = game.score - 5;
         game.sounds.playSound('explosion');
     }
 
 
 
-    //  Check for invader/ship collisions.
-    for(var i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
-        if((invader.x + invader.width/2) > (this.ship.x - this.ship.width/2) && 
-            (invader.x - invader.width/2) < (this.ship.x + this.ship.width/2) &&
-            (invader.y + invader.height/2) > (this.ship.y - this.ship.height/2) &&
-            (invader.y - invader.height/2) < (this.ship.y + this.ship.height/2)) {
+    //  Check for taco/trump collisions.
+    for(var i=0; i<this.tacos.length; i++) {
+        var taco = this.tacos[i];
+        if((taco.x + taco.width/2) > (this.trump.x - this.trump.width/2) && 
+            (taco.x - taco.width/2) < (this.trump.x + this.trump.width/2) &&
+            (taco.y + taco.height/2) > (this.trump.y - this.trump.height/2) &&
+            (taco.y - taco.height/2) < (this.trump.y + this.trump.height/2)) {
             //  Dead by collision!
             game.lives = 0;
             game.sounds.playSound('explosion');
@@ -620,7 +622,7 @@ PlayState.prototype.update = function(game, dt) {
     }
 
     //  Check for failure
-    if(game.score <= 0 || game.score < 100 && this.invaders.length === 0) {
+    if(game.score <= 0 || game.score < 100 && this.tacos.length === 0) {
     	
         game.moveToState(new GameOverState());
     }
@@ -635,7 +637,7 @@ PlayState.prototype.update = function(game, dt) {
     		game.score = 5;
     	}
     	
-    	this.config.shipspeed += 8;
+    	this.config.trumpspeed += 8;
         
         game.moveToState(new LevelIntroState(game.level));
     }
@@ -657,7 +659,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     
     
     
-    //  Draw ship.
+    //  Draw trump.
     var trumpImg = new Image();
     var trumpImg1 = new Image();
     var trumpImg0 = new Image();
@@ -672,16 +674,16 @@ PlayState.prototype.draw = function(game, dt, ctx) {
    	//clearTimeout(myVar);
    	if(pace == 1)
    	{
-   	  ctx.drawImage(trumpImg0, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	  ctx.drawImage(trumpImg0, this.trump.x - (this.trump.width / 2) - 30, (this.trump.y - (this.trump.height / 2)) - 34);	
    	}
    	else
    	{
-   	  ctx.drawImage(trumpImg1, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	  ctx.drawImage(trumpImg1, this.trump.x - (this.trump.width / 2) - 30, (this.trump.y - (this.trump.height / 2)) - 34);	
    	}
    }
    else
    {
-   	  ctx.drawImage(trumpImg, this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);	
+   	  ctx.drawImage(trumpImg, this.trump.x - (this.trump.width / 2) - 30, (this.trump.y - (this.trump.height / 2)) - 34);	
    }
   
 
@@ -689,11 +691,11 @@ PlayState.prototype.draw = function(game, dt, ctx) {
 
   	if (jumping)
   	{
-  		//this.ship.y -= 45;
+  		//this.trump.y -= 45;
   	}
   	if (jumping)
   	{
-  		ctx.drawImage(trumpImg1,this.ship.x - (this.ship.width / 2) - 30, (this.ship.y - (this.ship.height / 2)) - 34);
+  		ctx.drawImage(trumpImg1,this.trump.x - (this.trump.width / 2) - 30, (this.trump.y - (this.trump.height / 2)) - 34);
   	}
     
     
@@ -708,31 +710,31 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         //ctx.fillRect(wall.x - wall.width/2, wall.y - wall.height/2, wall.width, wall.height);
     }
 
-    //  Draw invaders.
+    //  Draw tacos.
     //ctx.fillStyle = '#006600';
   
     
     
-    for(var i=0; i<this.invaders.length; i++) {
-        var invader = this.invaders[i];
+    for(var i=0; i<this.tacos.length; i++) {
+        var taco = this.tacos[i];
         
         
         
-        ctx.drawImage(invader.image, (invader.x - invader.width/2), (invader.y - invader.height/2)-100);	
-        //ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
+        ctx.drawImage(taco.image, (taco.x - taco.width/2), (taco.y - taco.height/2)-100);	
+        //ctx.fillRect(taco.x - taco.width/2, taco.y - taco.height/2, taco.width, taco.height);
     }
 
-    //  Draw bombs.
+    //  Draw mexicans.
     ctx.fillStyle = '#ff5555';
     
   
   
-    for(var i=0; i<this.bombs.length; i++) {
-        var bomb = this.bombs[i];
+    for(var i=0; i<this.mexicans.length; i++) {
+        var mexican = this.mexicans[i];
         
        
         ctx.globalCompositeOperation='destination-over';
-        ctx.drawImage(bomb.image,(bomb.x) - 40,  (bomb.y) - 85 );
+        ctx.drawImage(mexicanx.image,(mexican.x) - 40,  (mexican.y) - 85 );
         
     
     }
@@ -740,8 +742,8 @@ PlayState.prototype.draw = function(game, dt, ctx) {
    
   
     
-    for(var i=0; i<this.rockets.length; i++) {
-        var rocket = this.rockets[i];
+    for(var i=0; i<this.bricks.length; i++) {
+        var brick = this.bricks[i];
         
      
         //loading brick image
@@ -749,14 +751,14 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         var brick = new Image();
         brick.src = 'img/brick1.png';
        
-        ctx.drawImage(brick,rocket.x, rocket.y -50);	
+        ctx.drawImage(brick,brick.x, brick.y -50);	
         
     		
     		  
     	        
         
       
-      // ctx.fillRect(rocket.x, rocket.y - 2, 1, 4);
+      // ctx.fillRect(brick.x, brick.y - 2, 1, 4);
     }
     
     
@@ -791,7 +793,7 @@ PlayState.prototype.keyDown = function(game, keyCode) {
 
     if(keyCode == 32) {
         //  Fire!
-        this.fireRocket();
+        this.firebrick();
     }
     if(keyCode == 80) {
         //  Push the pause state.
@@ -803,14 +805,14 @@ PlayState.prototype.keyUp = function(game, keyCode) {
 
 };
 
-PlayState.prototype.fireRocket = function() {
-    //  If we have no last rocket time, or the last rocket time 
-    //  is older than the max rocket rate, we can fire.
-    if(this.lastRocketTime === null || ((new Date()).valueOf() - this.lastRocketTime) > (1000 / this.config.rocketMaxFireRate))
+PlayState.prototype.firebrick = function() {
+    //  If we have no last brick time, or the last brick time 
+    //  is older than the max brick rate, we can fire.
+    if(this.lastbrickTime === null || ((new Date()).valueOf() - this.lastbrickTime) > (1000 / this.config.brickMaxFireRate))
     {   
-        //  Add a rocket.
-        this.rockets.push(new Rocket(this.ship.x, this.ship.y - 12, this.config.rocketVelocity));
-        this.lastRocketTime = (new Date()).valueOf();
+        //  Add a brick.
+        this.bricks.push(new brick(this.trump.x, this.trump.y - 12, this.config.brickVelocity));
+        this.lastbrickTime = (new Date()).valueOf();
         game.score = game.score - 1;
 
         //  Play the 'shoot' sound.
@@ -892,15 +894,15 @@ LevelIntroState.prototype.draw = function(game, dt, ctx) {
 };
 
 
-/* Ship - The ship has a position and that's about it. */
-function Ship(x, y) {
+/* trump - The trump has a position and that's about it. */
+function trump(x, y) {
     this.x = x;
     this.y = y;
     this.width = 50;
     this.height = 50;
 }
 
-/* Wall - Walls are built up by shooting the blocks, and torn down by the invader */
+/* Wall - Walls are built up by shooting the blocks, and torn down by the taco */
 function Wall(x, y){
     this.x = x;
     this.y = y;
@@ -908,15 +910,15 @@ function Wall(x, y){
     this.height = 30;
 }
 
-/* Rocket - Fired by the ship, they've got a position, velocity and state. */
-function Rocket(x, y, velocity) {
+/* brick - Fired by the trump, they've got a position, velocity and state. */
+function brick(x, y, velocity) {
     this.x = x;
     this.y = y;
     this.velocity = velocity;
 }
 
-/* Bomb - Dropped by invaders, they've got position, velocity. */
-function Bomb(x, y, velocity) {
+/* Mexican - Dropped by tacos, they've got position, velocity. */
+function Mexican(x, y, velocity) {
     this.x = x;
     this.y = y;
     this.velocity = velocity;
@@ -924,8 +926,8 @@ function Bomb(x, y, velocity) {
     this.image = new Image();
     this.image.src = ('img/mexican' + rand +'.png');
 }
-/* Invader - Invader's have position, type, rank/file and that's about it. */
-function Invader(x, y, rank, file, type) {
+/* taco - taco's have position, type, rank/file and that's about it. */
+function taco(x, y, rank, file, type) {
     this.x = x;
     this.y = y;
     this.rank = rank;
