@@ -34,7 +34,7 @@ function Game() {
         invaderDropDistance: 20,
         rocketVelocity: 120,
         rocketMaxFireRate: 2,
-        gameWidth: 400,
+        gameWidth: 700,
         gameHeight: 300,
         fps: 50,
         debugMode: false,
@@ -346,12 +346,12 @@ PlayState.prototype.enter = function(game) {
 
     //create the wall
     var wallRank = 3;
-    var wallFiles=30;
+    var wallFiles=50;
     var wallBlocks = [];
     for(var rank = 0; rank < wallRank; rank++){
         for(var file = 0; file < wallFiles; file++) {
             wallBlocks.push(new Wall(
-                        (game.width / 2) + ((wallFiles/2 - file) * 500 / wallFiles),
+                        (game.width / 2) + ((wallFiles/2 - file) * 750 / wallFiles),
                         (game.gameBounds.bottom +70)
                         ));
 
