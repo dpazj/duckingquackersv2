@@ -334,8 +334,8 @@ PlayState.prototype.enter = function(game) {
     for(var rank = 0; rank < ranks; rank++){
         for(var file = 0; file < files; file++) {
             invaders.push(new Invader(
-                (game.width / 2) + ((files/2 - file) * 300 / files),
-                (game.gameBounds.top + rank * 23),
+                (game.width / 2) + ((files/2 - file) * 400 / files),
+                (game.gameBounds.top + rank * 40),
                 rank, file, 'Invader'));
         }
     }
@@ -599,9 +599,16 @@ PlayState.prototype.draw = function(game, dt, ctx) {
 
     //  Draw invaders.
     ctx.fillStyle = '#006600';
+  
+    
+    
     for(var i=0; i<this.invaders.length; i++) {
         var invader = this.invaders[i];
-        ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
+        
+        
+        
+        ctx.drawImage(invader.image, invader.x - invader.width/2, invader.y - invader.height/2);	
+        //ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
     }
 
     //  Draw bombs.
@@ -744,7 +751,7 @@ LevelIntroState.prototype.update = function(game, dt) {
     if(this.countdown < 1) { 
         this.countdownMessage = "1"; 
     } 
-    if(this.countdown <= 1) {
+    if(this.countdown <= 3) {
         //  Move to the next level, popping this state.
         game.moveToState(new PlayState(game.config, this.level));
     }
@@ -806,8 +813,13 @@ function Invader(x, y, rank, file, type) {
     this.rank = rank;
     this.file = file;
     this.type = type;
-    this.width = 25;
-    this.height = 18;
+    this.width = 40;
+    this.height = 40;
+
+    this.image = new Image();
+    this.image.src = ('img/SlicedTaco/taco-0'+(9 - this.file)+'-0'+this.rank+ '.png');
+    
+    
 }
 
 /*  Game State
