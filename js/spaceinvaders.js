@@ -244,13 +244,16 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.clearRect(0, 0, game.width, game.height);
 
     ctx.font="30px Arial";
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#ff0000';
     ctx.textBaseline="center"; 
     ctx.textAlign="center"; 
-    ctx.fillText("Build That Wall!", game.width / 2, game.height/2 - 40); 
-    ctx.font="16px Arial";
+    ctx.fillText("Build That Wall!", game.width / 2, game.height/2 - 80); 
 
-    ctx.fillText("Press 'Enter' to start.", game.width / 2, game.height/2); 
+    ctx.font="16px Arial";
+    ctx.fillStyle = '#000080';
+    ctx.fillText("The Donald has been elected! He needs your help to build that wall!", game.width / 2, game.height/2 - 40);
+    ctx.fillText("Launch bricks at the Mexican resistance to build up your wall," , game.width / 2, game.height/2 - 20);
+    ctx.fillText("catch Mexicans to prevent your wall from being destroyed." , game.width / 2, game.height/2); 
 };
 
 WelcomeState.prototype.keyDown = function(game, keyCode) {
@@ -861,7 +864,7 @@ LevelIntroState.prototype.update = function(game, dt) {
     if(this.countdown < 1) { 
         this.countdownMessage = "1"; 
     } 
-    if(this.countdown < 1) {
+    if(this.countdown <= 1) {
         //  Move to the next level, popping this state.
         game.moveToState(new PlayState(game.config, this.level));
     }
