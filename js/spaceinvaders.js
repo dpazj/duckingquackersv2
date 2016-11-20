@@ -256,7 +256,7 @@ WelcomeState.prototype.draw = function(game, dt, ctx) {
     ctx.fillText("catch Mexicans to prevent your wall from being destroyed." , game.width / 2, game.height/2 - 20);
 
     ctx.font="24px Arial";
-    ctx.fillStyle = '#008080';
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillText("PRESS ENTER TO START" , game.width / 2, game.height/2 + 20); 
 };
 
