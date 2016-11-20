@@ -40,7 +40,7 @@ function Game() {
         debugMode: false,
         invaderRanks: 5,
         invaderFiles: 10,
-        shipSpeed: 120,
+        shipSpeed: 150,
         levelDifficultyMultiplier: 0.3,
         pointsPerInvader: 5
     };
@@ -334,7 +334,7 @@ PlayState.prototype.enter = function(game) {
     for(var rank = 0; rank < ranks; rank++){
         for(var file = 0; file < files; file++) {
             invaders.push(new Invader(
-                (game.width / 2) + ((files/2 - file) * 400 / files),
+                (game.width / 2) + ((files/2 - file) * 510 / files),
                 (game.gameBounds.top + rank * 40),
                 rank, file, 'Invader'));
         }
@@ -465,8 +465,8 @@ PlayState.prototype.update = function(game, dt) {
         for(var j=0; j<this.rockets.length; j++){
             var rocket = this.rockets[j];
 
-            if(rocket.x >= (invader.x - invader.width/1.2) && rocket.x <= (invader.x + invader.width/1.2) &&
-                rocket.y >= (invader.y - invader.height/1.5) && rocket.y <= (invader.y + invader.height/1.5)) {
+            if(rocket.x >= (invader.x - invader.width) && rocket.x <= (invader.x  + invader.width) &&
+                rocket.y >= (invader.y - invader.height) && rocket.y <= (invader.y + invader.height)) {
                 
                 //  Remove the rocket, set 'bang' so we don't process
                 //  this rocket again.
@@ -482,6 +482,7 @@ PlayState.prototype.update = function(game, dt) {
         }
     }
 
+    
     //  Find all of the front rank invaders.
     var frontRankInvaders = {};
     for(var i=0; i<this.invaders.length; i++) {
@@ -568,7 +569,7 @@ PlayState.prototype.update = function(game, dt) {
     		game.score = 5;
     	}
     	
-    	this.config.shipspeed += 5;
+    	this.config.shipspeed += 8;
         
         game.moveToState(new LevelIntroState(game.level));
     }
@@ -598,7 +599,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     }
 
     //  Draw invaders.
-    ctx.fillStyle = '#006600';
+    //ctx.fillStyle = '#006600';
   
     
     
@@ -607,7 +608,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         
         
         
-        ctx.drawImage(invader.image, invader.x - invader.width/2, invader.y - invader.height/2);	
+        ctx.drawImage(invader.image, (invader.x - invader.width/2), (invader.y - invader.height/2)-70);	
         //ctx.fillRect(invader.x - invader.width/2, invader.y - invader.height/2, invader.width, invader.height);
     }
 
@@ -638,7 +639,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
         var brick = new Image();
         brick.src = 'img/brick1.png';
        
-        ctx.drawImage(brick,rocket.x, rocket.y);	
+        ctx.drawImage(brick,rocket.x, rocket.y -70);	
         
     		
     		  
